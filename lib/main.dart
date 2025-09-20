@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Student.dart';
 
 void main() {
   runApp(const MyApp());
@@ -56,9 +56,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  int _age = 20;
-  String _name = "Martin";
-  bool _isProgrammer = true;
+  int age = 21;
+  String name = "Martin";
+  bool programing = true;
+  final List<String> students = ['Alumno1', 'Alumno2', 'Alumno3'];
+  final Student student = Student("Martin", "20223tn139");
+  TextEditingController _txtName = TextEditingController();
 
   void _incrementCounter() {
     setState(() {
@@ -74,12 +77,40 @@ class _MyHomePageState extends State<MyHomePage> {
   void _decrementCounter() {
     setState(() {
       if (_counter > 0) {
-      _counter--;  
+        _counter--;
       }
-      
     });
   }
 
+  Widget _getAllStudents() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 12),
+        Text(
+          "Students:",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 12),
+        ...students.map((n) => Text("- $n")).toList(),
+      ],
+    );
+  }
+
+void _addStudent(){
+  final name = _txtName.text.trim();
+  if(name.isEmpty){
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Please write something"))
+    );
+    return;
+
+  }
+  setState(() {
+    students.add(name);
+  });
+  _txtName.clear();
+}
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -122,13 +153,37 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-            Text('Nombre: $_name'),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: TextField(
+                controller: _txtName,
+                decoration: InputDecoration(
+                  labelText: "Name",
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: ElevatedButton(
+                onPressed: _addStudent,
+                child: Text("Add Student"),
+              )
+             
+            ),
 
-            Text('Edad: $_age'),
-            Text('Soy bueno pa la chamba: $_isProgrammer'),
+            SizedBox(height: 15),
+            Text('Nombre : $name'),
+            Text('Edad: $age'),
+            Text('Programo?: $programing'),
+            SizedBox(height: 15),
+            Text("Student1: ${student.name} "),
+
+            _getAllStudents(),
           ],
         ),
       ),
+
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -145,6 +200,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
+
+      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
