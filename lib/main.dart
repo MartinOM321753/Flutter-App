@@ -60,8 +60,12 @@ class _MyHomePageState extends State<MyHomePage> {
   String name = "Martin";
   bool programing = true;
   final List<String> students = ['Alumno1', 'Alumno2', 'Alumno3'];
+  final List<Student> objectStudent = [];
   final Student student = Student("Martin", "20223tn139");
   TextEditingController _txtName = TextEditingController();
+
+  TextEditingController _txtMatricula = TextEditingController();
+  TextEditingController _txtNombre = TextEditingController();
 
   void _incrementCounter() {
     setState(() {
@@ -96,6 +100,20 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
   }
+    Widget _getAllStudentsObj() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 12),
+        Text(
+          "Obj Students:",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 12),
+        ...objectStudent.map((n) => Text("- $n")).toList(),
+      ],
+    );
+  }
 
 void _addStudent(){
   final name = _txtName.text.trim();
@@ -108,6 +126,25 @@ void _addStudent(){
   }
   setState(() {
     students.add(name);
+  });
+  _txtName.clear();
+}
+
+
+void _addStudentObject(){
+  final nombre = _txtNombre.text.trim();
+  final matricula = _txtMatricula.text.trim();
+
+  if(nombre.isEmpty && matricula.isEmpty ){
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Please write something"))
+    );
+    return;
+
+  }
+  setState(() {
+    final Student ObjStudent = Student(nombre, matricula);
+    objectStudent.add(ObjStudent);
   });
   _txtName.clear();
 }
@@ -129,7 +166,7 @@ void _addStudent(){
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
@@ -172,6 +209,37 @@ void _addStudent(){
              
             ),
 
+
+                Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: TextField(
+                controller: _txtNombre,
+                decoration: InputDecoration(
+                  labelText: "Nombre",
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            
+                Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: TextField(
+                controller: _txtMatricula,
+                decoration: InputDecoration(
+                  labelText: "Matricula",
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: ElevatedButton(
+                onPressed: _addStudentObject,
+                child: Text("Add Student"),
+              )
+             
+            ),
+
             SizedBox(height: 15),
             Text('Nombre : $name'),
             Text('Edad: $age'),
@@ -180,6 +248,7 @@ void _addStudent(){
             Text("Student1: ${student.name} "),
 
             _getAllStudents(),
+            _getAllStudentsObj(),
           ],
         ),
       ),
