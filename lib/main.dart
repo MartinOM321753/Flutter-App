@@ -110,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 12),
-        ...objectStudent.map((n) => Text("- $n")).toList(),
+        ...objectStudent.map((n) => Text("- ${n.name} , ${n.studentId}",)).toList(),
       ],
     );
   }
@@ -143,10 +143,11 @@ void _addStudentObject(){
 
   }
   setState(() {
-    final Student ObjStudent = Student(nombre, matricula);
-    objectStudent.add(ObjStudent);
+    //final Student ObjStudent = Student(nombre, matricula);
+    objectStudent.add(Student(nombre, matricula));
   });
-  _txtName.clear();
+  _txtNombre.clear();
+  _txtMatricula.clear();
 }
   @override
   Widget build(BuildContext context) {
